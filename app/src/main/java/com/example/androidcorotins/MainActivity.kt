@@ -71,12 +71,35 @@ class MainActivity : AppCompatActivity() {
 //            printFollowers()
 //            printthisAsync()
 //            printLunchWithasync()
-            cancleableCoroutine()
+//            cancleableCoroutine()
+//            checkRunBlockingOrWithContext()
+            runBlocking()
         }
 
-
-
     }
+
+    //using runBlocking
+    fun runBlocking(){
+        runBlocking {
+            launch {
+                delay(1000)
+                println("inside")
+            }
+            println("completed")
+        }
+    }
+
+    //using withContext
+    suspend fun checkRunBlockingOrWithContext(){
+        println("before")
+        withContext(Dispatchers.IO){
+            delay(1000)
+            println("inside")
+        }
+        println("completed")
+        Thread.sleep(2000)
+    }
+
 
     //if there is no expection of data then use launch otherwise async
 
