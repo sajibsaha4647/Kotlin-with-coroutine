@@ -70,8 +70,8 @@ class MainActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.IO).launch {
 //            printFollowers()
 //            printthisAsync()
-            printLunchWithasync()
-
+//            printLunchWithasync()
+            cancleableCoroutine()
         }
 
 
@@ -107,6 +107,29 @@ class MainActivity : AppCompatActivity() {
             var inst = async { getInstraFollowers() }
             println("here all print fb${fb.await()}and instragram print${inst.await()}")
         }
+    }
+
+
+    suspend fun cancleableCoroutine(){ //here i am using cancelable CoroutineScope with child
+       var perentjob = CoroutineScope(Dispatchers.IO).launch {
+
+           if (isActive){
+               for(i in 1..1000){
+                   println("this is for parent job")
+               }
+           }
+                var childjobs = launch {
+                    delay(2000)
+                    println("this is child job")
+                }
+        }
+
+        delay(1000)
+        perentjob.cancel()
+        println("parent job cancle")
+        perentjob.join()
+        println("parent job completed")
+
     }
 
     suspend fun getFollowers():Int{
