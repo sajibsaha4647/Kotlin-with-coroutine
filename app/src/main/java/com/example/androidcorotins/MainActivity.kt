@@ -68,12 +68,19 @@ class MainActivity : AppCompatActivity() {
         }
 
         CoroutineScope(Dispatchers.IO).launch {
-            printFollowers()
+//            printFollowers()
+//            printthisAsync()
+            printLunchWithasync()
+
         }
+
+
 
     }
 
-    suspend fun printFollowers(){
+    //if there is no expection of data then use launch otherwise async
+
+    suspend fun printFollowers(){ //job wiill help to execute this scope function
         var follower = 0
       var job =  CoroutineScope(Dispatchers.IO).launch {
            follower = getFollowers()
@@ -82,10 +89,34 @@ class MainActivity : AppCompatActivity() {
         println(follower)
     }
 
+
+    suspend fun printthisAsync(){//now using async function which is work as like javascript async and await
+        val jobs = CoroutineScope(Dispatchers.IO).async {
+            getFollowers()
+        }
+        val jobs2 = CoroutineScope(Dispatchers.IO).async {
+            getInstraFollowers()
+        }
+        println(jobs.await().toString())
+        println(jobs2.await().toString())
+    }
+
+    suspend fun printLunchWithasync(){ //using async and luch function with same time
+        CoroutineScope(Dispatchers.IO).launch {
+            var fb = async{ getFollowers() }
+            var inst = async { getInstraFollowers() }
+            println("here all print fb${fb.await()}and instragram print${inst.await()}")
+        }
+    }
+
     suspend fun getFollowers():Int{
         delay(1000)
         return 54;
+    }
 
+    suspend fun getInstraFollowers():Int{
+        delay(1000)
+        return 44;
     }
 
     suspend fun Task1(){
